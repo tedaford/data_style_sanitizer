@@ -20,7 +20,7 @@ RSpec.describe DataStyleSanitizer::Processor do
     input = "<div data-style=\"color: red;\">Hello</div>"
     output = process_html(input)
 
-    expect(output).to match(/<div class=\"ds-[a-f0-9]+\">Hello<\/div>/)
+    expect(output).to match(/<div class="ds-[a-f0-9]+">Hello<\/div>/)
     expect(output).to match(%r{<style nonce="#{nonce}">})
     expect(output).to match(/\.ds-[a-f0-9]+ { color: red !important; }/)
   end
@@ -29,7 +29,7 @@ RSpec.describe DataStyleSanitizer::Processor do
     input = '<span class="existing" data-style="font-weight: bold;">Text</span>'
     output = process_html(input)
 
-    expect(output).to match(/<span class=\"existing ds-[a-f0-9]+\">Text<\/span>/)
+    expect(output).to match(/<span class="existing ds-[a-f0-9]+">Text<\/span>/)
     expect(output).to match(/\.ds-[a-f0-9]+ { font-weight: bold !important; }/)
   end
 
@@ -49,9 +49,9 @@ RSpec.describe DataStyleSanitizer::Processor do
 
     output = process_html(input)
 
-    class_names = output.scan(/class=\"(ds-[a-f0-9]+)\"/).flatten
+    class_names = output.scan(/class="(ds-[a-f0-9]+)"/).flatten
     expect(class_names.uniq.length).to eq(1)
-    expect(output.scan(/<style nonce=/).count).to eq(1)
+    expect(output.scan("<style nonce=").count).to eq(1)
     expect(output).to include("color: blue !important;")
   end
 
@@ -65,14 +65,14 @@ RSpec.describe DataStyleSanitizer::Processor do
 
     expect(output).to include("color: green !important;")
     expect(output).to include("font-size: 14px !important;")
-    expect(output.scan(/<style nonce=/).count).to eq(1)
+    expect(output.scan("<style nonce=").count).to eq(1)
   end
 
   it "ignores malformed data-style values gracefully" do
     input = "<div data-style=\";:bad-css;;\">Oops</div>"
     output = process_html(input)
 
-    expect(output).to match(/<div class=\"ds-[a-f0-9]+\">Oops<\/div>/)
+    expect(output).to match(/<div class="ds-[a-f0-9]+">Oops<\/div>/)
     expect(output).to include("!important;")
   end
 end

@@ -19,13 +19,13 @@ module DataStyleSanitizer
     private
 
     def extract_styles
-      @doc.css('[data-style]').each_with_index do |node, i|
-        style_string = node.get_attribute('data-style')
+      @doc.css("[data-style]").each_with_index do |node, i|
+        style_string = node.get_attribute("data-style")
         class_name = generate_class_name(style_string)
 
         # Apply class and remove attribute
-        node.remove_attribute('data-style')
-        node.set_attribute('class', [node.get_attribute('class'), class_name].compact.join(' '))
+        node.remove_attribute("data-style")
+        node.set_attribute("class", [node.get_attribute("class"), class_name].compact.join(" "))
 
         # Store unique styles
         @styles[class_name] ||= style_string
@@ -39,20 +39,20 @@ module DataStyleSanitizer
 
     def inject_style_block
       return if @styles.empty?
-    
+
       # Create the <style> tag
       style_tag = Nokogiri::XML::Node.new("style", @doc)
       style_tag["nonce"] = @nonce
-    
+
       # Generate CSS rules
       css_rules = @styles.map do |class_name, rule|
-        rule_lines = rule.split(';').map(&:strip).reject(&:empty?)
+        rule_lines = rule.split(";").map(&:strip).reject(&:empty?)
         rule_lines.map! { |line| "#{line.strip} !important;" } # Ensure override
-        ".#{class_name} { #{rule_lines.join(' ')} }"
+        ".#{class_name} { #{rule_lines.join(" ")} }"
       end.join("\n")
-    
+
       style_tag.content = css_rules
-    
+
       # Add the <style> tag to the <head> if it exists, otherwise to the root
       head = @doc.at_css("head")
       if head

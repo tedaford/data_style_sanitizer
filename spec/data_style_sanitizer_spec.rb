@@ -22,7 +22,7 @@ RSpec.describe DataStyleSanitizer do
   it "injects only unique styles into the style tag" do
     style_tag = doc.at_css("style[nonce='abc123']")
     expect(style_tag).not_to be_nil
-  
+
     css_text = style_tag.text
     expect(css_text.scan(/\.(ds-[a-f0-9]+) \{/).flatten.uniq.count).to eq(2)
     expect(css_text).to include("color: red")
