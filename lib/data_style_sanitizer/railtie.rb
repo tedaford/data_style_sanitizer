@@ -20,7 +20,7 @@ module DataStyleSanitizer
         response.each { |part| body << part }
 
         nonce = extract_nonce(env)
-        new_body = DataStyleSanitizer.sanitize_html(body, nonce: nonce)
+        new_body = DataStyleSanitizer.process(body, nonce: nonce)
 
         headers["Content-Length"] = new_body.bytesize.to_s
         [status, headers, [new_body]]
