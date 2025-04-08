@@ -3,7 +3,6 @@
 require_relative "data_style_sanitizer/processor"
 require_relative "data_style_sanitizer/railtie"
 require_relative "data_style_sanitizer/version"
-require_relative "data_style_sanitizer/railtie"
 require_relative "data_style_sanitizer/middleware"
 
 module DataStyleSanitizer

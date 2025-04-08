@@ -14,3 +14,5 @@ gem "standard", "~> 1.3"
 
 gem "nokogiri"
 gem "securerandom"
+
+gem "brakeman", "~> 7.0"

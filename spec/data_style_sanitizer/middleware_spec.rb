@@ -57,7 +57,7 @@ RSpec.describe DataStyleSanitizer::Middleware do
 
     context "when the response has a Content-Type of text/html" do
       it "processes the response body" do
-        status, headers, body = middleware.call(env)
+        status, headers, _ = middleware.call(env)
 
         expect(status).to eq(200)
         expect(headers["Content-Type"]).to eq("text/html")
