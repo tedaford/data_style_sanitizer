@@ -23,5 +23,10 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
+      - name: Run Brakeman
+        run: |
+          gem install brakeman
+          brakeman --output-format json --output-file brakeman-output.json
+          cat brakeman-output.json
       - name: Run the default task
         run: bundle exec rake
