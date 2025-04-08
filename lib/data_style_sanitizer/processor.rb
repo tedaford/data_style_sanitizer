@@ -19,8 +19,16 @@ module DataStyleSanitizer
     private
 
     def extract_styles
-      @doc.css("[data-style]").each_with_index do |node, i|
+      @doc.css("[data-style]").each do |node|
         style_string = node.get_attribute("data-style")
+        next if style_string.nil? || style_string.strip.empty? # Skip empty attributes
+
+        # Remove CSS comments and normalize spacing
+        style_string = style_string.gsub(/\/\*.*?\*\//, "").strip
+        style_string = style_string.split(";").map(&:strip).reject(&:empty?).join("; ")
+
+        next if style_string.empty? # Skip if the style becomes empty after cleaning
+
         class_name = generate_class_name(style_string)
 
         # Apply class and remove attribute
@@ -33,7 +41,7 @@ module DataStyleSanitizer
     end
 
     def generate_class_name(style_string)
-      hash = Digest::SHA256.hexdigest(style_string)[0..7]
+      hash = Digest::SHA256.hexdigest(style_string.downcase)[0..7] # Ensure case-insensitivity
       "ds-#{hash}"
     end
 
@@ -53,12 +61,17 @@ module DataStyleSanitizer
 
       style_tag.content = css_rules
 
-      # Add the <style> tag to the <head> if it exists, otherwise to the root
+      # Add the <style> tag to the <head> if it exists, otherwise to the <body> or fragment
       head = @doc.at_css("head")
       if head
         head.add_child(style_tag)
       else
-        @doc.add_child(style_tag)
+        body = @doc.at_css("body")
+        if body
+          body.add_child(style_tag)
+        else
+          @doc.add_child(style_tag) # Append directly to the fragment
+        end
       end
     end
   end
