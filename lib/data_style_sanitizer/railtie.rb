@@ -32,7 +32,16 @@ module DataStyleSanitizer
     private
 
     def extract_nonce(env)
-      env.dig("action_dispatch.content_security_policy_nonce", :style)
+      if env.respond_to?(:dig)
+        env.dig("action_dispatch.content_security_policy_nonce", :style)
+      else
+        # get nonce from meta tag
+        # This is a fallback for older versions of Rails
+        meta_tag = env["rack.session"]&.dig("meta_tags", "csp-nonce")
+        if meta_tag
+          meta_tag.match(/nonce="([^"]+)"/)[1] if /nonce="([^"]+)"/.match?(meta_tag)
+        end
+      end
     end
   end
 end
