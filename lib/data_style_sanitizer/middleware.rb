@@ -1,4 +1,4 @@
-require_relative "data_style_sanitizer/processor"
+require_relative "processor"
 
 module DataStyleSanitizer
   class Middleware

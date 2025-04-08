@@ -34,4 +34,5 @@ Gem::Specification.new do |spec|
   # Dependencies
   spec.add_dependency "nokogiri"
   spec.add_dependency "securerandom"
+  spec.add_dependency "rails", "~> 7.1"
 end

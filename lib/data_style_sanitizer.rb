@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
-require "data_style_sanitizer/processor"
-require "data_style_sanitizer/railtie" if defined?(Rails)
+require_relative "data_style_sanitizer/processor"
+require_relative "data_style_sanitizer/railtie"
 require_relative "data_style_sanitizer/version"
+require_relative "data_style_sanitizer/railtie"
+require_relative "data_style_sanitizer/middleware"
 
 module DataStyleSanitizer
   class Error < StandardError; end
