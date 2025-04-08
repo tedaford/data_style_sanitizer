@@ -12,17 +12,21 @@ module DataStyleSanitizer
       private
 
       def inject_data_style_sanitizer_styles
-        return unless html_response? && response.body.include?('data-style')
+        return unless html_response? && response.body.include?("data-style")
 
-        nonce = content_security_policy_nonce(:style) rescue nil
+        nonce = begin
+          content_security_policy_nonce(:style)
+        rescue
+          nil
+        end
         style_block = DataStyleSanitizer::Renderer.generate_style_block(response.body, nonce: nonce)
 
         # Inject into <head>
-        response.body.sub!('</head>', "#{style_block}</head>")
+        response.body.sub!("</head>", "#{style_block}</head>")
       end
 
       def html_response?
-        response.content_type == 'text/html'
+        response.content_type == "text/html"
       end
     end
   end

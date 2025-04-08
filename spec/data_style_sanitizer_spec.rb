@@ -3,7 +3,6 @@
 require "data_style_sanitizer"
 
 RSpec.describe DataStyleSanitizer do
-
   let(:html_input) do
     <<~HTML
       <html>

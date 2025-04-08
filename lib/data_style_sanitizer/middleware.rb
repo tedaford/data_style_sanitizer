@@ -32,8 +32,6 @@ module DataStyleSanitizer
     def extract_nonce_from_env(env)
       if env["action_dispatch.content_security_policy_nonce"].respond_to?(:call)
         env["action_dispatch.content_security_policy_nonce"].call(:style)
-      else
-        nil
       end
     end
   end
