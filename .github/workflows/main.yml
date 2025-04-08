@@ -26,7 +26,7 @@ jobs:
       - name: Run Brakeman
         run: |
           gem install brakeman
-          brakeman --format json -o brakeman-output.json
+          brakeman --format json -o brakeman-output.json --force
           cat brakeman-output.json
       - name: Run the default task
         run: bundle exec rake
